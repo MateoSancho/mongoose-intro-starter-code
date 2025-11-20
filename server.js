@@ -38,6 +38,14 @@ app.get("/", (req, res, next) => {
   res.json({ message: "all good here!" })
 })
 
+
+// Get /users
+app.get("/users", () => {
+  // ...
+  // User.find()
+  // res.json(users)
+})
+
 app.get("/potatoes/:potatoId", (req,res) => {
   //console.log(req.body) //access info from body
   //console.log(req.params) //access info from params
@@ -108,6 +116,63 @@ try{
 } catch (error) {
   //console.log(error)
 }
+})
+
+
+// Routes for Songs
+const Song = require("./models/song.model")
+
+app.post("/song", async(req,res) => {
+  try{
+
+    await Song.create({
+      title: req.body.title,
+      releaseDate: req.body.releaseDate,
+      artists: req.body.artist
+    })
+
+    res.send("all good, song created")
+
+  } catch (error) {
+    //console.log(error)
+  }
+})
+
+app.get("/song/:songId", async (req,res) => {
+
+  try{
+
+    const responseSong = await Song
+    .findById(req.params.songId) //Find info of only song
+    .populate("artist", "name isTouring") //Give all info and sort it by name and isTouring
+    //2) .populate("artist", {name, isTouring})
+    //3) .populate({
+    //path: "artist",
+    //select: {name: 1, isTouring: 1}
+    //})
+
+    //const responseArtist = await Artist.findById(responseSong.artist)
+
+    res.json(responseSong)
+
+  } catch (error) {
+    //console.log(error)
+  }
+})
+
+app.get("/song", async (req,res) => {
+
+  try{
+
+    const responseSong = await Song
+    .find()
+    populate("artist")
+
+    res.json(responseSong)
+
+  } catch (error) {
+    //console.log(error)
+  }
 })
 
 // server listen & PORT

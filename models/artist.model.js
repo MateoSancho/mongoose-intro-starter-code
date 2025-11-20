@@ -16,7 +16,7 @@ const artistSchema = new mongoose.Schema({
     isTouring: Boolean,
     genre: {
         type: [String],
-        enum: ["rock", "indie", "alternative", "metal"]
+        enum: ["rock", "indie", "alternative", "metal", "jazz", "country"]
     }
 })
 
